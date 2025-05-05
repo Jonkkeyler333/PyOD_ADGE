@@ -10,14 +10,19 @@ class LOF(BaseDetector):
     This class implements the LOF algorithm, which identifies outliers in a dataset based on the local density of data points.
     It is a wrapper around the own implementation or scikit learn LOF.
     """
-    def __init__(self,estimator,n_neighbors = 20,contamination = 0.1,metric = 'euclidean', **metric_params)->None:
+    def __init__(self,estimator:str,n_neighbors:int = 20,contamination:float = 0.1,metric = 'euclidean', **metric_params)->None:
         super(LOF,self).__init__(contamination)
-        if not isinstance(estimator,LocalOutlierFactor) or not isinstance(estimator,LOF_Sklearn):
-            raise ValueError('estimator must be an instance of LocalOutlierFactor or LOF_Sklearn')
+        if estimator == 'sklearn':
+            estimator_cls = LOF_Sklearn
+        elif estimator == 'clasic':
+            estimator_cls = LocalOutlierFactor
+        else:
+            raise ValueError("estimator debe ser 'sklearn' o 'clasic'")
         self.n_neighbors = n_neighbors
+        self.is_sklearn = True if estimator_cls == LOF_Sklearn else False
         self.metric = metric
         self.metric_params = metric_params
-        self.estimator = estimator
+        self.estimator = estimator_cls
     
     def fit(self,x,y=None)->'LOF':
         """Fit the model to the data.
@@ -31,12 +36,14 @@ class LOF(BaseDetector):
         :rtype: LOF
         """
         X=check_array(x)
-        self.detector = LocalOutlierFactor(
+        self.detector = self.estimator(
             n_neighbors=self.n_neighbors,
             contamination=self.contamination,
             metric=self.metric,
             **self.metric_params)
         self.detector.fit(X,y)
+        if self.is_sklearn:
+            self.decision_scores_ = self.detector.negative_outlier_factor_
         self.decision_scores_ = self.detector.outlier_factor_
         return self
     
@@ -57,4 +64,6 @@ class LOF(BaseDetector):
         :rtype: np.ndarray
         """
         check_is_fitted(self,'detector')
+        if self.is_sklearn:
+            return self.detector.decision_function()
         return self.detector.decision_function()
