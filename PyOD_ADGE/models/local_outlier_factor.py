@@ -137,7 +137,7 @@ class LocalOutlierFactor(BaseEstimator, OutlierMixin):
         :type p: _np.ndarray
         :param o: The other point.
         :type o: _np.ndarray
-        :param k_distance: The k-distance of the point p.
+        :param k_distance: The k-distance of the point o.
         :type k_distance: int
         :return: The reachability distance between p and o.
         :rtype: float
