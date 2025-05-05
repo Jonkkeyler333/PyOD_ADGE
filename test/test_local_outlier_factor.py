@@ -4,7 +4,7 @@ if proj_root not in sys.path:
     sys.path.insert(0, proj_root)
 import unittest
 import numpy as np
-from PyOD_ADGE.models.local_outlier_factor import LocalOutlierFactor  # Ajusta el import a la ruta real de tu módulo
+from PyOD_ADGE.models.local_outlier_factor import LocalOutlierFactor
 
 class TestLocalOutlierFactor(unittest.TestCase):
 
@@ -32,8 +32,6 @@ class TestLocalOutlierFactor(unittest.TestCase):
             lof.fit(X)
 
     def test_k_distance_and_neighbors(self):
-        # Triángulo equilátero de lado 1: con k=1, habrá un k-distance=1
-        # y dos vecinos a esa distancia, per tu lógica incluye todos con dist <= k-distance.
         X = np.array([
             [0, 0],
             [1, 0],
