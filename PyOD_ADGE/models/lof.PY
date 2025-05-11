@@ -14,10 +14,10 @@ class LOF(BaseDetector):
         super(LOF,self).__init__(contamination)
         if estimator == 'sklearn':
             estimator_cls = LOF_Sklearn
-        elif estimator == 'clasic':
+        elif estimator == 'classic':
             estimator_cls = LocalOutlierFactor
         else:
-            raise ValueError("estimator debe ser 'sklearn' o 'clasic'")
+            raise ValueError("estimator debe ser 'sklearn' o 'classic'")
         self.n_neighbors = n_neighbors
         self.is_sklearn = True if estimator_cls == LOF_Sklearn else False
         self.metric = metric
@@ -36,6 +36,8 @@ class LOF(BaseDetector):
         :rtype: LOF
         """
         X=check_array(x)
+        self._X = X
+        print(f'soy clase {self.is_sklearn}')
         self.detector = self.estimator(
             n_neighbors=self.n_neighbors,
             contamination=self.contamination,
@@ -44,7 +46,8 @@ class LOF(BaseDetector):
         self.detector.fit(X,y)
         if self.is_sklearn:
             self.decision_scores_ = self.detector.negative_outlier_factor_
-        self.decision_scores_ = self.detector.outlier_factor_
+        else:
+            self.decision_scores_ = self.detector.outlier_factor_
         return self
     
     @property
@@ -65,5 +68,5 @@ class LOF(BaseDetector):
         """
         check_is_fitted(self,'detector')
         if self.is_sklearn:
-            return self.detector.decision_function()
+            return self.detector.fit_predict(self._X)
         return self.detector.decision_function()
