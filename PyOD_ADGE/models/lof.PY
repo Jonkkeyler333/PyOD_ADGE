@@ -37,7 +37,6 @@ class LOF(BaseDetector):
         """
         X=check_array(x)
         self._X = X
-        print(f'soy clase {self.is_sklearn}')
         self.detector = self.estimator(
             n_neighbors=self.n_neighbors,
             contamination=self.contamination,
