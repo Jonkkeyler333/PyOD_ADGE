@@ -2,6 +2,7 @@ from sklearn.utils.validation import check_array
 from sklearn.utils.validation import check_is_fitted
 from .base import BaseDetector
 from .local_outlier_factor import LocalOutlierFactor
+from .LofParalelizable import LocalOutlierFactorParalelizable
 from sklearn.neighbors import LocalOutlierFactor as LOF_Sklearn
 import numpy as np
 
@@ -14,10 +15,12 @@ class LOF(BaseDetector):
         super(LOF,self).__init__(contamination)
         if estimator == 'sklearn':
             estimator_cls = LOF_Sklearn
+        elif estimator == 'optimized':
+            estimator_cls = LocalOutlierFactorParalelizable   
         elif estimator == 'classic':
             estimator_cls = LocalOutlierFactor
         else:
-            raise ValueError("estimator debe ser 'sklearn' o 'classic'")
+            raise ValueError("estimator debe ser 'sklearn' , 'classic' o 'optimized'")
         self.n_neighbors = n_neighbors
         self.is_sklearn = True if estimator_cls == LOF_Sklearn else False
         self.metric = metric
