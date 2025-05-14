@@ -87,7 +87,7 @@ class PCA(BaseDetector):
             random_state=self.random_state
         )
         self.detector.fit(X)
-
+        
         if self.n_selected_components is None:
             self.n_selected_components = self.n_components
         if self.n_components is None:
@@ -98,6 +98,10 @@ class PCA(BaseDetector):
         else:
             self.n_selected_components = self.n_components
         if self.n_components is not None:
+            if isinstance(self.n_components, float):
+                self.n_selected_components = self.detector.components_.shape[0]
+            else:
+                self.n_selected_components = self.n_components
             self.components_ = self.detector.components_[:self.n_components]
             self.explained_variance_ = self.detector.explained_variance_[:self.n_components]
             self.explained_variance_ratio_ = self.detector.explained_variance_ratio_[:self.n_components]
@@ -128,6 +132,7 @@ class PCA(BaseDetector):
     def decision_function(self, X):
         """Compute the decision function for the fitted model.
         This method calculates the outlier scores for the input data based on the fitted model.
+        The decision function is the Mahalanobis distance of the data points to the PCA components.
         :param x: The input data, a 2D array-like structure where each row is a sample and each column is a feature.
         :type x: array-like, shape (n_samples, n_features)
         :return: The outlier scores of the input samples. Shape (n_samples,)
@@ -143,6 +148,7 @@ class PCA(BaseDetector):
     
     def _process_decision_scores(self):
         """Process the decision scores to determine the outlier labels and threshold."""
+
         if isinstance(self.contamination, (float, int)):
             self.threshold_ = percentile(self.decision_scores_,
                                          100 * (1 - self.contamination))
