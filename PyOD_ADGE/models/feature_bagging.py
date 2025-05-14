@@ -3,7 +3,6 @@ import numpy as np
 from .lof import LOF
 from sklearn.utils.validation import check_array,check_is_fitted
 from joblib import Parallel,delayed
-from sklearn.base import clone
 
 class FeatureBagging(BaseDetector):
     def __init__(self,base_estimator:str='classic',
