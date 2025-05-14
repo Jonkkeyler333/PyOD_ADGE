@@ -164,6 +164,17 @@ class PCA(BaseDetector):
         self._sigma = np.std(self.decision_scores_)
         return self
     
+    def fit_transform(self, X,y=None):
+        """Fit the model to the data and transform it."""
+        X = check_array(X)
+        self.fit(X)  
+
+        if self.standardization and self.scaler is not None:
+            X = self.scaler.transform(X)
+
+        self.X_transformed = self.detector.transform(X)[:, :self.n_components]
+        return self.X_transformed
+    
 
 
 
