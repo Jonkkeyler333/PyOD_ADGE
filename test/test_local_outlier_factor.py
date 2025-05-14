@@ -4,7 +4,7 @@ if proj_root not in sys.path:
     sys.path.insert(0, proj_root)
 import unittest
 import numpy as np
-from PyOD_ADGE.models.local_outlier_factor import LocalOutlierFactor
+from PyOD_ADGE.models.LofParalelizable import LocalOutlierFactorParalelizable as LocalOutlierFactor
 
 class TestLocalOutlierFactor(unittest.TestCase):
 
