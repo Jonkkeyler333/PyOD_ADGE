@@ -62,7 +62,7 @@ class LOF(BaseDetector):
     def decision_function(self)->np.ndarray:
         """Predict the outlier score of the input samples.
         This method computes the outlier scores for the input samples based on the fitted model.
-        :return: The outlier scores of the input samples. Shape (n_samples,)
+        :return: The outlier scores of the input samples , shape (n_samples,)
         :rtype: np.ndarray
         """
         check_is_fitted(self,'detector')
