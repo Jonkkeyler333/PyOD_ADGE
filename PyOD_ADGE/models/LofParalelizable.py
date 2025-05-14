@@ -30,14 +30,16 @@ class LocalOutlierFactorParalelizable(BaseEstimator, OutlierMixin):
         self._is_fitted = True
         return self
 
-    def decision_function(self):
-        check_is_fitted(self, '_is_fitted')
-        return self.outlier_factor_
 
-    def predict(self):
+    def decision_function(self):
         scores = self.outlier_factor_
         self.threshold_ = np.quantile(scores, 1 - self.contamination)
         return np.where(scores > self.threshold_, -1, 1)
+        
+    def predict(self):
+        check_is_fitted(self, '_is_fitted')
+        return self.outlier_factor_
+
 
     @property
     def outlier_factor_(self) -> np.ndarray:
