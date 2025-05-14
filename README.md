@@ -75,7 +75,7 @@ Challenge de reproducibilidad, Análisis de datos a gran escala, grupo E
 2. Intenta importar un módulo del paquete:
 
     ```python
-    from PyOD_ADGE.models import LofParalelizable
+    from PyOD_ADGE.models.feature_bagging import FeatureBagging
     print("¡Paquete instalado correctamente!")
     ```
 
@@ -86,10 +86,10 @@ Challenge de reproducibilidad, Análisis de datos a gran escala, grupo E
 ### Ejemplo de Uso Básico
 
 ```python
-from PyOD_ADGE.models import LofParalelizable
+from PyOD_ADGE.models.lof import LOF
 
 # Crea una instancia del detector LOF paralelizable
-detector = LofParalelizable(n_neighbors=20, contamination=0.1)
+detector = LOF('optimized',n_neighbors=20, contamination=0.1)
 
 # Entrena con tus datos (ejemplo con datos dummy)
 import numpy as np
@@ -97,8 +97,8 @@ X = np.random.randn(100, 5)  # 100 muestras, 5 características
 
 detector.fit(X)
 
-# Predice anomalías
-labels = detector.predict(X)
+# Predice anomalías , -1 outlier , 1 inlier
+labels = detector.fit_predict(X)
 print(labels)
 ```
 
